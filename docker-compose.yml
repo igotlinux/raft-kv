@@ -1,0 +1,83 @@
+# 5-node Raft KV cluster. Each node gets:
+#   - internal Raft RPC port 7000 (leader election / log replication / admin fault controls)
+#   - client-facing KV API port 8000 (PUT/GET/DELETE/status)
+#   - a named volume so a `docker compose restart nodeN` actually exercises
+#     WAL crash recovery instead of starting from a clean slate.
+#
+# Usage:
+#   docker compose up --build
+#   curl localhost:8001/status
+#   curl -X POST localhost:8001/kv/put -d '{"key":"foo","value":"bar"}'
+#   docker compose kill -s SIGKILL node1   # simulate a crash
+#   docker compose start node1             # simulate a restart; WAL replays
+#
+version: "3.9"
+
+x-node-env: &common-env
+  PEERS: "node1=node1:7000,node2=node2:7000,node3=node3:7000,node4=node4:7000,node5=node5:7000"
+  CLIENT_ADDRS: "node1=node1:8000,node2=node2:8000,node3=node3:8000,node4=node4:8000,node5=node5:8000"
+  DATA_DIR: /data
+  RAFT_LISTEN_ADDR: ":7000"
+  CLIENT_LISTEN_ADDR: ":8000"
+
+services:
+  node1:
+    build: .
+    hostname: node1
+    environment:
+      <<: *common-env
+      NODE_ID: node1
+    ports: ["8001:8000", "7001:7000"]
+    volumes: ["node1-data:/data"]
+    networks: [raftnet]
+
+  node2:
+    build: .
+    hostname: node2
+    environment:
+      <<: *common-env
+      NODE_ID: node2
+    ports: ["8002:8000", "7002:7000"]
+    volumes: ["node2-data:/data"]
+    networks: [raftnet]
+
+  node3:
+    build: .
+    hostname: node3
+    environment:
+      <<: *common-env
+      NODE_ID: node3
+    ports: ["8003:8000", "7003:7000"]
+    volumes: ["node3-data:/data"]
+    networks: [raftnet]
+
+  node4:
+    build: .
+    hostname: node4
+    environment:
+      <<: *common-env
+      NODE_ID: node4
+    ports: ["8004:8000", "7004:7000"]
+    volumes: ["node4-data:/data"]
+    networks: [raftnet]
+
+  node5:
+    build: .
+    hostname: node5
+    environment:
+      <<: *common-env
+      NODE_ID: node5
+    ports: ["8005:8000", "7005:7000"]
+    volumes: ["node5-data:/data"]
+    networks: [raftnet]
+
+networks:
+  raftnet:
+    driver: bridge
+
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:
+  node4-data:
+  node5-data:
