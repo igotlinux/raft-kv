@@ -5,9 +5,6 @@ protocol from scratch: leader election, log replication, a WAL-backed
 persistent log with crash recovery, containerized deployment, and a
 fault-injection test suite covering 5 failure modes.
 
-This README doubles as interview prep -- each section says not just
-*what* was built but *why* it works and what its known trade-offs are.
-
 ## Architecture
 
 ```
