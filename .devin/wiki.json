@@ -1,0 +1,232 @@
+{
+  "repo_notes": [
+    {
+      "content": "What raft-kv is: a from-scratch Raft consensus engine with a replicated KV store, HTTP transport, Docker/AWS deployment. Architecture map and links to child pages"
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "What raft-kv is: a from-scratch Raft consensus engine with a replicated KV store, HTTP transport, Docker/AWS deployment. Architecture map and links to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Getting Started & Local Cluster",
+      "purpose": "Build, run 5-node local cluster with scripts/start_local.sh and stop_local.sh, ports, data dirs, health checks.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Server Entrypoint & Configuration",
+      "purpose": "cmd/server/main.go wiring: env vars (NODE_ID, PEERS, CLIENT_ADDRS, DATA_DIR, listen addrs), component construction order.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Raft Consensus Engine",
+      "purpose": "Overview of internal/raft: state machine roles, interfaces, links to election/replication, persistence, RPC pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Core Types and Interfaces",
+      "purpose": "LogEntry, Command, ApplyMsg, Transport/Persister interfaces, Node struct and Status().",
+      "parent": "Raft Consensus Engine",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Leader Election and Log Replication",
+      "purpose": "Election timers, term handling, no-op on election, AppendEntries loop, nextIndex/matchIndex, commit advancement, fast conflict backtracking, in-flight RPC guard.",
+      "parent": "Raft Consensus Engine",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "RPC Message Formats",
+      "purpose": "RequestVote/AppendEntries request and reply structs and their semantics.",
+      "parent": "Raft Consensus Engine",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Persistence and WAL Recovery",
+      "purpose": "Persister: state.json atomic writes, append-only wal.log, Recover, TruncateAndReplace, torn-write handling.",
+      "parent": "Raft Consensus Engine",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Key-Value Store Layer",
+      "purpose": "Overview of internal/kv replicated state machine and client API; links to children.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Store: Replicated State Machine",
+      "purpose": "Store.Run apply loop, propose/pending index map, ProposeTimeout, ErrNotLeader, local read semantics.",
+      "parent": "Key-Value Store Layer",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Client HTTP API",
+      "purpose": "Endpoints /kv/put, /kv/get, /kv/delete, /status; JSON shapes, 421 leader redirect.",
+      "parent": "Key-Value Store Layer",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Transport Layer",
+      "purpose": "Overview of internal/transport: HTTP Raft RPC transport and admin fault-injection API.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "HTTP Raft Transport",
+      "purpose": "Implementation of raft.Transport over HTTP, peer addressing, serialization, timeouts.",
+      "parent": "Transport Layer",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Admin Fault-Injection API",
+      "purpose": "/admin/* endpoints for drops, delays, partitions on a live node.",
+      "parent": "Transport Layer",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Testing and Fault Injection",
+      "purpose": "Overview of test strategy: in-memory fake network harness, failure-mode tests, live cluster scripts.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Fake Network and Cluster Harness",
+      "purpose": "fake_network_test.go and cluster_test.go: drop rates, delays, partitions, crash/restart helpers.",
+      "parent": "Testing and Fault Injection",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Failure-Mode Test Suite",
+      "purpose": "Election, replication, crash, restart recovery, partition, RPC loss/delay tests.",
+      "parent": "Testing and Fault Injection",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Live Cluster Fault Scripts",
+      "purpose": "scripts/fault_injection.sh and docker_crash_restart.sh against running clusters.",
+      "parent": "Testing and Fault Injection",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Deployment",
+      "purpose": "Overview of container build and cluster deployment paths; links to Docker and AWS pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Docker Image and Compose Cluster",
+      "purpose": "Multi-stage Dockerfile, docker-compose 5-node topology, volumes, raftnet network.",
+      "parent": "Deployment",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "AWS EC2 Deployment",
+      "purpose": "Instance topology, security groups, deploy.sh SSH orchestration, failure-domain tradeoffs.",
+      "parent": "Deployment",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Image Distribution via ECR",
+      "purpose": "push_to_ecr.sh: repo creation, login, build/tag/push, pulling on EC2.",
+      "parent": "Deployment",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of Raft and repo-specific terms (term, quorum, WAL, torn write, ApplyMsg, ErrNotLeader, LeaderHint, no-op on election, ConflictIndex, in-flight RPC guard, PEERS, CLIENT_ADDRS, raftnet, etc.) with file pointers.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}
